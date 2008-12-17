@@ -76,7 +76,7 @@ class SoapSource extends DataSource {
         if(Configure::read() > 0) {
             if (is_soap_fault($this->error)) {
                 trigger_error('<span style = "color:Red;text-align:left"><b>SOAP Fault:</b> (faultcode: ' . $this->error->faultcode . ', faultstring: ' . $this->error->faultstring . ')</span>', E_USER_WARNING);
-            } elseif {
+            } else {
                 trigger_error('<span style = "color:Red;text-align:left"><b>SOAP Error:</b> ' . $this->error . '</span>', E_USER_WARNING);
             }
             if($result) {
