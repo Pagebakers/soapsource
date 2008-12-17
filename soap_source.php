@@ -53,7 +53,7 @@ class SoapSource extends DataSource {
         try {
             $result = $this->client->__soapCall($method, $queryData);
         } catch (SoapFault $fault) {
-            $this->error = $fault;
+            $this->error = $fault->faultstring;
         }
         
         if($this->error) {
@@ -74,9 +74,7 @@ class SoapSource extends DataSource {
     
     public function showError($result = null) {
         if(Configure::read() > 0) {
-            if (is_soap_fault($this->error)) {
-                trigger_error('<span style = "color:Red;text-align:left"><b>SOAP Fault:</b> (faultcode: ' . $this->error->faultcode . ', faultstring: ' . $this->error->faultstring . ')</span>', E_USER_WARNING);
-            } else {
+            if($this->error) {
                 trigger_error('<span style = "color:Red;text-align:left"><b>SOAP Error:</b> ' . $this->error . '</span>', E_USER_WARNING);
             }
             if($result) {
