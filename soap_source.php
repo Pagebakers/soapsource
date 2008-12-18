@@ -50,7 +50,18 @@ class SoapSource extends DataSource {
      * @var boolean
      */
     public $connected = false;
-        
+    
+    /**
+     * The default configuration
+     *
+     * @var array
+     */
+    public $_baseConfig = array(
+        'wsdl' => null,
+        'location' => '',
+        'uri' => ''
+    );
+    
     /**
      * Constructor
      *
@@ -69,8 +80,27 @@ class SoapSource extends DataSource {
      * @return boolean True on success, false on failure
      */ 
     public function connect() {
-        $this->client = new SoapClient($this->config['wsdl']);
-
+        if(!class_exists('SoapClient')) {
+            $this->error = 'Class SoapClient not found, please enable SOAP extensions';
+            $this->showError();
+            return false;
+        }
+        
+        $options = array();
+        if(!empty($this->config['location']) && !empty($this->config['uri'])) {
+            $options = array(
+                'location' => $this->config['location'],
+                'uri' => $this->config['uri']
+            );
+        }
+        
+        try {
+            $this->client = new SoapClient($this->config['wsdl'], $options);
+        } catch(SoapFault $fault) {
+            $this->error = $fault->faultstring;
+            $this->showError();
+        }
+        
         if ($this->client) {
             $this->connected = true;
         }
@@ -105,6 +135,10 @@ class SoapSource extends DataSource {
      */
     public function query() {
         $this->error = false;
+        
+        if(!$this->connected) {
+            return false;
+        }
         
         $args = func_get_args();
         
