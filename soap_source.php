@@ -81,19 +81,19 @@ class SoapSource extends DataSource {
      */ 
     public function connect() {
         if(!class_exists('SoapClient')) {
-            $this->error = 'Class SoapClient not found, please enable SOAP extensions';
+            $this->error = 'Class SoapClient not found, please enable Soap extensions';
             $this->showError();
             return false;
         }
-        
-        $options = array();
-        if(!empty($this->config['location']) && !empty($this->config['uri'])) {
-            $options = array(
-                'location' => $this->config['location'],
-                'uri' => $this->config['uri']
-            );
+        // Set Soap options
+        $options = array('trace' => Configure::read('debug') > 0);
+        if(!empty($this->config['location'])) {
+            $options['location'] = $this->config['location'];
         }
-        
+        if(!empty($this->config['uri'])) {
+            $options['uri'] = $this->config['uri'];
+        }
+                
         try {
             $this->client = new SoapClient($this->config['wsdl'], $options);
         } catch(SoapFault $fault) {
@@ -205,5 +205,6 @@ class SoapSource extends DataSource {
             }
         }
     }
+
 }
 ?>
