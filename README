@@ -24,9 +24,9 @@ Cakephp 1.2
 
 Usage :
 
-Copy the soap_source.php file to your app/modules/datasources/ directory
+Copy the soap_source.php file to your app/models/datasources/ directory
 
-Add a configuration to your database.php in app/core/
+Add a configuration to your database.php in app/config/
 
 var $soap = array(
     'datasource' => 'soap',
