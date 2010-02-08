@@ -59,7 +59,10 @@ class SoapSource extends DataSource {
     public $_baseConfig = array(
         'wsdl' => null,
         'location' => '',
-        'uri' => ''
+        'uri' => '',
+        'login' => '',
+        'password' => '',
+        'authentication' => 'SOAP_AUTHENTICATION_BASIC'
     );
     
     /**
@@ -92,6 +95,11 @@ class SoapSource extends DataSource {
         }
         if(!empty($this->config['uri'])) {
             $options['uri'] = $this->config['uri'];
+        }
+        if(!empty($this->config['login'])){
+            $options['login'] = $this->config['login'];
+            $options['password'] = $this->config['password'];
+            $options['authentication'] = $this->config['authentication'];
         }
                 
         try {
