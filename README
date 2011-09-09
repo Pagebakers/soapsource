@@ -32,7 +32,9 @@ var $soap = array(
     'datasource' => 'soap',
     'wsdl' => 'http://localhost/soapservice.wsdl', // wsdl mode
     'location' => '', // Required for non wsdl mode
-    'uri' => '' // Required for non wsdl mode
+    'uri' => '', // Required for non wsdl mode
+    'proxy_host' => 'http://proxy.com', // optional
+    'proxy_port' => 3128, // optional
 );
 
 Then in your model set:
