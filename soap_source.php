@@ -174,9 +174,18 @@ class SoapSource extends DataSource {
         if(count($args) == 2) {
             $method = $args[0];
             $queryData = $args[1];
+        } elseif(count($args) == 3 && !empty($args[2]) && !empty($this->config['headers'])) {
+            $method = $args[0];
+            $queryData = $args[1];
+            $headerData = $args[2];
         } elseif(count($args) > 2 && !empty($args[1])) {
             $method = $args[0];
             $queryData = $args[1][0];
+        } 
+        
+        if (!empty($headerData)) {
+            $header = new SoapHeader($this->config['headers']['ns'], $this->config['headers']['container'], $headerData);
+            $this->client->__setSoapHeaders($header);
         }
         
         if(!$method || !$queryData) {
