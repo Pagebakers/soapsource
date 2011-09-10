@@ -35,6 +35,7 @@ var $soap = array(
     'uri' => '', // Required for non wsdl mode
     'proxy_host' => 'http://proxy.com', // optional
     'proxy_port' => 3128, // optional
+    'curl_off' => true, // optional - turns curl wsdl fetch off
 );
 
 Then in your model set:

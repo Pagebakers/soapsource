@@ -107,6 +107,18 @@ class SoapSource extends DataSource {
         if(!empty($this->config['proxy_port'])) {
             $options['proxy_port'] = $this->config['proxy_port'];
         }
+        
+         /** Workaround to prevent SoapClient throwing a RuntimeException **/
+        if (extension_loaded('curl') && Configure::read('debug') > 0 && !empty($this->config['wsdl']) && empty($this->config['curl_off']))
+        {
+            $ch = curl_init($this->config['wsdl']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FAILONERROR, true);
+            if (!curl_exec($ch))
+            {
+                throw new Exception("Unable to load WSDL File " . $this->config['wsdl']);
+            }
+        }
                 
         try {
             $this->client = new SoapClient($this->config['wsdl'], $options);
