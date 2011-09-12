@@ -101,6 +101,24 @@ class SoapSource extends DataSource {
             $options['password'] = $this->config['password'];
             $options['authentication'] = $this->config['authentication'];
         }
+        if(!empty($this->config['proxy_host'])) {
+            $options['proxy_host'] = $this->config['proxy_host'];
+        }
+        if(!empty($this->config['proxy_port'])) {
+            $options['proxy_port'] = $this->config['proxy_port'];
+        }
+        
+         /** Workaround to prevent SoapClient throwing a RuntimeException **/
+        if (extension_loaded('curl') && Configure::read('debug') > 0 && !empty($this->config['wsdl']) && empty($this->config['curl_off']))
+        {
+            $ch = curl_init($this->config['wsdl']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FAILONERROR, true);
+            if (!curl_exec($ch))
+            {
+                throw new Exception("Unable to load WSDL File " . $this->config['wsdl']);
+            }
+        }
                 
         try {
             $this->client = new SoapClient($this->config['wsdl'], $options);
@@ -156,9 +174,18 @@ class SoapSource extends DataSource {
         if(count($args) == 2) {
             $method = $args[0];
             $queryData = $args[1];
+        } elseif(count($args) == 3 && !empty($args[2]) && !empty($this->config['headers'])) {
+            $method = $args[0];
+            $queryData = $args[1];
+            $headerData = $args[2];
         } elseif(count($args) > 2 && !empty($args[1])) {
             $method = $args[0];
             $queryData = $args[1][0];
+        } 
+        
+        if (!empty($headerData)) {
+            $header = new SoapHeader($this->config['headers']['ns'], $this->config['headers']['container'], $headerData);
+            $this->client->__setSoapHeaders($header);
         }
         
         if(!$method || !$queryData) {
