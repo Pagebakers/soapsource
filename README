@@ -32,7 +32,14 @@ var $soap = array(
     'datasource' => 'soap',
     'wsdl' => 'http://localhost/soapservice.wsdl', // wsdl mode
     'location' => '', // Required for non wsdl mode
-    'uri' => '' // Required for non wsdl mode
+    'uri' => '', // Required for non wsdl mode
+    'proxy_host' => 'http://proxy.com', // optional
+    'proxy_port' => 3128, // optional
+    'curl_off' => true, // optional - turns curl wsdl fetch off
+    'headers' => array( // optional - used with 3rd parameter in model
+                    'ns' => 'namespace',
+                    'container' => 'session_key',
+    )
 );
 
 Then in your model set:
@@ -50,3 +57,7 @@ $this->Model->query('SoapMethod', array('mySoapParams'));
 or
 
 $this->Model->SoapMethod(array('mySoapParams'));
+
+or with header data
+
+$this->Model->query('SoapMethod', array('mySoapParams'), array('mySoapHeaderParams'));
