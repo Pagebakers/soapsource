@@ -25,7 +25,6 @@
  * @link        http://github.com/Pagebakers/soapsource/
  * @copyright   Copyright 2008 Pagebakers
  * @license     http://www.gnu.org/licenses/lgpl.html
-
  *
 */
 class SoapSource extends DataSource {
@@ -188,7 +187,7 @@ class SoapSource extends DataSource {
             $this->client->__setSoapHeaders($header);
         }
         
-        if(!$method || !$queryData) {
+        if(!isset($method) || !isset($queryData)) {
             return false;
         }
         
