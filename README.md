@@ -27,6 +27,7 @@ Add a configuration to your database.php in app/config/
           'ns' => 'namespace',
           'container' => 'session_key',
         )
+        'use' => SOAP_ENCODED // optional - used only for non wsdl mode
     );
 
 Then in your model set:
@@ -37,18 +38,29 @@ Then in your model set:
 
 And you're ready to go.
 
+Asuming that you parameters are:
+
+    $params = array('param1' => 'value1', 'param2' => 'value2');
+
 In your controller you can now use
 
-    $this->Model->query('SoapMethod', array('mySoapParams'));
+    $this->Model->query('SoapMethod', array($params));
 
-or
-
-    $this->Model->SoapMethod(array('mySoapParams'));
+**Important**: notice the *array()* enclosing your params array.
 
 or with header data
 
-    $this->Model->query('SoapMethod', array('mySoapParams'), array('mySoapHeaderParams'));
-    
+    $headerParams = array('headerParam1' = 'value1', 'headerParam2' => 'value2');
+
+    $this->Model->query('SoapMethod', array($params), array($headerParams);
+
+**Important**: again, notice the *array()* enclosing your params and header params arrays.
+
+or
+
+    $this->Model->SoapMethod($params);
+
+**Important**: notice the difference with the previous examples. In this case DON'T enclose the params with *array()*.
 
 ## Thanks for updating
 
