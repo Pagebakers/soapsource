@@ -106,6 +106,9 @@ class SoapSource extends DataSource {
         if(!empty($this->config['proxy_port'])) {
             $options['proxy_port'] = $this->config['proxy_port'];
         }
+        if(!empty($this->config['use'])) {
+            $options['use'] = $this->config['use'];
+        }
         
          /** Workaround to prevent SoapClient throwing a RuntimeException **/
         if (extension_loaded('curl') && Configure::read('debug') > 0 && !empty($this->config['wsdl']) && empty($this->config['curl_off']))
@@ -149,7 +152,7 @@ class SoapSource extends DataSource {
      *
      * @return array List of SOAP methods
      */
-    public function listSources() {
+    public function listSources($data = null) {
        return $this->client->__getFunctions();
     }
     
@@ -179,7 +182,7 @@ class SoapSource extends DataSource {
             $headerData = $args[2];
         } elseif(count($args) > 2 && !empty($args[1])) {
             $method = $args[0];
-            $queryData = $args[1][0];
+            $queryData = $args[1];
         } 
         
         if (!empty($headerData)) {
